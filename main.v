@@ -5,16 +5,16 @@ import json
 fn main() {
 
 	// a := qsqlqueryu('2','5') or {return}
-	// sqldata := sqlquery('1','10')?
+	sqldata := sqlquery('1','10000')?
 	// println(sqldata)
 
-	sqldata := mysql_orm('1','10')
+	// sqldata := mysql_orm('1','10')
+	// println(sqldata)
 
-
-	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
+	// // data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
 	reponse := request(jsonstr)?
-	// s := request(data)?
+	// // s := request(data)?
 	println(reponse)
 }
 
