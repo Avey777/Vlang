@@ -2,20 +2,19 @@ import mysql
 import net.http
 import json
 
+
 fn main() {
 
-	// a := qsqlqueryu('2','5') or {return}
 	sqldata := sqlquery('1','10000')?
-	// println(sqldata)
-
 	// sqldata := mysql_orm('1','10')
 	// println(sqldata)
-
-	// // data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
 	reponse := request(jsonstr)?
-	// // s := request(data)?
 	println(reponse)
+
+	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
+	// reponse := request(data)?
+	// println(reponse)
 }
 
 fn request(data string) ?string {
@@ -96,6 +95,7 @@ struct Module {
 	is_cash_delivery int
 	delivery_type int
 	transport_mode int
+	examine_status int
 }
 
 
@@ -110,7 +110,7 @@ fn mysql_orm(startpoint string, numperpage string) []map[string]string {
 	conn.connect() or { panic(err) }
 
 	res := sql conn {
-		select from Module limit startpoint+','+numperpage
+		select from Module where examine_status==2  limit startpoint+','+numperpage
 	}
 	// eprintln('$row.id')
 	mut mapstrlist := []map[string]string{} //创建空数组
