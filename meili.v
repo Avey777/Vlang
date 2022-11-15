@@ -5,11 +5,12 @@ import json
 
 fn main() {
 
-	sqldata := sqlquery('1','10000')?
-	// sqldata := mysql_orm('1','10')
+	// sqldata := sqlquery('1','10000')?
+	sqldata := Con{} 
+	// sqldata := mysql_orm('1','10000')? //orm
 	// println(sqldata)
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
-	reponse := request(jsonstr)?
+	reponse := request(jsonstr)!
 	println(reponse)
 
 	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
@@ -17,28 +18,45 @@ fn main() {
 	// println(reponse)
 }
 
-fn request(data string) ?string {
+fn request(data string) !string {
 	mut req := http.Request{
 		method: http.Method.post
 		url: "http://192.168.3.2:7700/indexes/tospinomall/documents"
+		// url: "https://ms-43c9c269b6b3-327.lon.meilisearch.io/indexes/tospinomall/documents"
 		// data: "{'id': '6204', 'tsin': 'SPU000280COEY'}" // 此样式不可用
 		// data: '{"id": "6204", "tsin": "SPU000280COEY"}'
 		data: data
 	}
-	req.add_custom_header('Content-Type', 'application/json')?
-	req.add_custom_header('Authorization', 'Bearer aveyamie')?
-	reponse := req.do()?
+	req.add_custom_header('Content-Type', 'application/json')!
+	req.add_custom_header('Authorization', 'Bearer aveyamie')!
+	// req.add_custom_header('Authorization', 'Bearer d54cef574e174d918572faf6a2b5f53da067f1a8')?
+	reponse := req.do()!
 	// println("打印req:$reponse")
 	return reponse.body
 }
 
-pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
+[params]
+struct Con {
+	// host: '192.168.3.2'
+	// port: 3306
+	// username: 'admin'
+	// password: 'admin'
+
+	host string = '42.193.159.7'
+	// port i64 = '3306'
+	username string = 'select'
+	password string = 'Dgxdl021'
+	dbname string = 'tospinomall_product'
+}
+
+pub fn (c Con) sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 	mut conn := mysql.Connection{
-		host: '192.168.3.2'
+
+		host: c.host
 		port: 3306
-		username: 'admin'
-		password: 'admin'
-		dbname: 'tospinomall_product'
+		username: c.username
+		password: c.password
+		dbname: c.dbname
 	}
 	conn.connect()?
 	// res := conn.query('show tables')?
@@ -79,6 +97,8 @@ pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 	return mapstrlist
 }
 
+
+// ORM ---
 [table: 'pms_goods_info']
 struct Module {
 	id           int    [primary; sql: serial]
@@ -98,13 +118,17 @@ struct Module {
 	examine_status int
 }
 
-
-fn mysql_orm(startpoint string, numperpage string) []map[string]string {
+fn mysql_orm(startpoint string, numperpage string) ?[]map[string]string {
 	mut conn := mysql.Connection{
-		host: '10.243.0.2'
+		// host: '10.243.0.2'
+		// port: 3306
+		// username: 'admin'
+		// password: 'admin'
+
+		host: '42.193.159.7'
 		port: 3306
-		username: 'admin'
-		password: 'admin'
+		username: 'select'
+		password: 'Dgxdl021'
 		dbname: 'tospinomall_product'
 	}
 	conn.connect() or { panic(err) }
