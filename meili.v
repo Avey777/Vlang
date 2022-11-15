@@ -5,8 +5,7 @@ import json
 
 fn main() {
 
-	// sqldata := sqlquery('1','10000')?
-	sqldata := Con{} 
+	sqldata := sqlquery('1','1')?
 	// sqldata := mysql_orm('1','10000')? //orm
 	// println(sqldata)
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
@@ -47,16 +46,18 @@ struct Con {
 	username string = 'select'
 	password string = 'Dgxdl021'
 	dbname string = 'tospinomall_product'
+	// startpoint string = '1'
+	// numperpage string = '1000'
 }
 
-pub fn (c Con) sqlquery(startpoint string, numperpage string) ?[]map[string]string {
+pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 	mut conn := mysql.Connection{
 
-		host: c.host
+		host: '42.193.159.7' //c.host
 		port: 3306
-		username: c.username
-		password: c.password
-		dbname: c.dbname
+		username: 'select' //c.username
+		password: 'Dgxdl021' //c.password
+		dbname: 'tospinomall_product' //c.dbname
 	}
 	conn.connect()?
 	// res := conn.query('show tables')?
