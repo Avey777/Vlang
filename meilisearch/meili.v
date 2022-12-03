@@ -5,12 +5,12 @@ import json
 
 fn main() {
 
-	sqldata := sqlquery('1','1')?
+	sqldata := sqlquery('1','100000')!
 	// sqldata := mysql_orm('1','10000')? //orm
 	// println(sqldata)
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
 	reponse := request(jsonstr)!
-	println(reponse)
+	// println(reponse)
 
 	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	// reponse := request(data)?

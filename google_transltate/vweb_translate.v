@@ -54,3 +54,32 @@ fn request(get_tk string, q string) !string {
 	return reponse.body
 
 }
+
+
+/*
+
+# 配置http访问的;# 配置https访问的
+export http_proxy=http://127.0.0.1:32345
+export https_proxy=http://127.0.0.1:32345
+# 配置http和https访问
+export all_proxy=socks5://127.0.0.1:32346
+
+# ip代理查询
+curl cip.cc
+curl ipinfo.io
+#查看是否可以访问google
+curl -v google.com
+*/
+
+/*
+配置 Git 代理
+
+执行如下命令可设置代理：
+git config --global http.proxy http://127.0.0.1:1088
+git config --global https.proxy https://127.0.0.1:1088
+
+执行如下命令则取消代理：
+git config --global --unset http.proxy
+git config --global --unset https.proxy
+
+*/

@@ -1,10 +1,3 @@
-// fn JS.Math.tan(f64) f64
-// fn JS.console.log(string)
-// fn tan(x f64) f64 {
-//     return f64(JS.Math.tan(x)) // do not forget to wrap return value in `f64` again, atm js gen does not do this automatically
-// }
-// JS.console.log("hello from js!")
-
 import net.http
 import json
 
