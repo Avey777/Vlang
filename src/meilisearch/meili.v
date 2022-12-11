@@ -4,20 +4,21 @@ import mysql
 import net.http
 import json
 
-pub fn request_sqlquery() {
+pub fn mysql_write_meili() !string{
 
 	sqldata := sqlquery('1','1000')!
 
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
-	reponse := request(jsonstr)!
+	reponse := request_meili(jsonstr)!
 	println(reponse)
 
 	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	// reponse := request(data)?
 	// println(reponse)
+	return json.encode(reponse)
 }
 
-pub fn request(data string) !string {
+fn request_meili(data string) !string {
 	mut req := http.Request{
 		method: http.Method.post
 		url: "http://192.168.3.2:7700/indexes/tospinomall/documents"

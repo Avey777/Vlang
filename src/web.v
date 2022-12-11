@@ -1,7 +1,7 @@
 import vweb
 import json
-// import Vlang.src.translate
-import Vlang.src.meilisearch
+import translate {req_gtranslate}
+import meilisearch {mysql_write_meili}
 
 struct App {
 	vweb.Context
@@ -20,18 +20,29 @@ pub fn (mut app App) index() vweb.Result {
 }
 
 ['/meilisearch';get;post]
-pub fn (mut app App) meilisearch() vweb.Result {
+pub fn (mut app App) meilisearch() !vweb.Result {
 
-	mut sqldata := meilisearch.sqlquery('1','1000')!
-	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
-	// reponse := request(jsonstr)!
-	// println(reponse)
-	return app.json("jsonstr")
-
+	req := mysql_write_meili()!
+	return app.json(req)
 }
 
-// ['/translate']
-// pub fn (mut app App) translate() !string {
-// 	r := translate.request()!
-// 	println(r)
-// }
+
+
+const (
+	get_tk		= '193286.281871'
+	q 			= '我是最好的中国人'
+)
+
+['/gtranslate';get;post]
+pub fn (mut app App) gtranslate() !vweb.Result {
+
+	mut response := req_gtranslate(get_tk,q)!
+	if app.status == '200 OK'{
+	
+	mut responsejson := json.encode(response)
+		return app.json(responsejson)
+	}else{
+		return app.text("GoogleTranslate 非正常响应")
+	}
+	return app.json(response)
+}

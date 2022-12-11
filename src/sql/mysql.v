@@ -11,7 +11,7 @@ fn main() {
 	orm := mysql_orm('1','2')
 	println(orm)
 }
-pub fn sqlquery(startpoint string, numperpage string) ![]map[string]string {
+pfn sqlquery(startpoint string, numperpage string) ![]map[string]string {
 	mut conn := mysql.Connection{
 		host: '192.168.3.2'
 		port: 3306

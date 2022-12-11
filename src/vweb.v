@@ -21,7 +21,7 @@ const (
 	namechange_period  = time.hour * 24
 )
 
-struct App {
+struct App1 {
 	vweb.Context
 	started_at i64 [vweb_global]
 mut:
