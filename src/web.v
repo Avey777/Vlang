@@ -1,6 +1,6 @@
 import vweb
-import json
-import translate {req_gtranslate}
+// import json
+import translate
 import meilisearch {mysql_write_meili}
 
 struct App {
@@ -22,8 +22,13 @@ pub fn (mut app App) index() vweb.Result {
 ['/meilisearch';get;post]
 pub fn (mut app App) meilisearch() !vweb.Result {
 
-	req := mysql_write_meili()!
-	return app.json(req)
+	mut req := mysql_write_meili()!
+	if app.status == '200 OK'{
+		return app.json(req)
+	}else{
+		return app.text('Meili 非正常响应')
+	}
+	// return app.json(req)
 }
 
 
@@ -36,13 +41,11 @@ const (
 ['/gtranslate';get;post]
 pub fn (mut app App) gtranslate() !vweb.Result {
 
-	mut response := req_gtranslate(get_tk,q)!
+	mut response := translate.req_gtranslate(get_tk,q)!
 	if app.status == '200 OK'{
-	
-	mut responsejson := json.encode(response)
-		return app.json(responsejson)
+		return app.json(response)
 	}else{
 		return app.text("GoogleTranslate 非正常响应")
 	}
-	return app.json(response)
+	// return app.json(response)
 }
