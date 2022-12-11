@@ -1,13 +1,11 @@
+module translate
+
 import net.http
 import json
 
-fn main(){
-	r := request()!
-	mut jsonstr := json.encode(r)
-	println(jsonstr)
-}
 
-fn request() !string {
+
+pub fn request() !string {
 	// get_tk := '859249.762488'
 	// q := '我'
 
@@ -28,5 +26,5 @@ fn request() !string {
 	req.add_custom_header('referer', 'https://translate.google.cn/')!
 	reponse := req.do()!
 	// println("打印req:$reponse")
-	return reponse.body
+	return json.encode(reponse.body)
 }

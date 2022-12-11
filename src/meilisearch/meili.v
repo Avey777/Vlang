@@ -1,23 +1,23 @@
+module meilisearch
+
 import mysql
 import net.http
 import json
 
+pub fn request_sqlquery() {
 
-fn main() {
+	sqldata := sqlquery('1','1000')!
 
-	sqldata := sqlquery('1','100000')!
-	// sqldata := mysql_orm('1','10000')? //orm
-	// println(sqldata)
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
 	reponse := request(jsonstr)!
-	// println(reponse)
+	println(reponse)
 
 	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	// reponse := request(data)?
 	// println(reponse)
 }
 
-fn request(data string) !string {
+pub fn request(data string) !string {
 	mut req := http.Request{
 		method: http.Method.post
 		url: "http://192.168.3.2:7700/indexes/tospinomall/documents"
@@ -31,7 +31,7 @@ fn request(data string) !string {
 	// req.add_custom_header('Authorization', 'Bearer d54cef574e174d918572faf6a2b5f53da067f1a8')?
 	reponse := req.do()!
 	// println("打印req:$reponse")
-	return reponse.body
+	return json.encode(reponse.body)
 }
 
 [params]
@@ -50,7 +50,7 @@ struct Con {
 	// numperpage string = '1000'
 }
 
-pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
+pub fn sqlquery(startpoint string, numperpage string) ![]map[string]string {
 	mut conn := mysql.Connection{
 
 		host: '42.193.159.7' //c.host
@@ -59,14 +59,14 @@ pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 		password: 'Dgxdl021' //c.password
 		dbname: 'tospinomall_product' //c.dbname
 	}
-	conn.connect()?
+	conn.connect()!
 	// res := conn.query('show tables')?
 	// mut sqlstr := 'select id,tsin from tospinomall_product.pms_goods_info limit 5'
 	mut sqlstr := 'select id,id,tsin, good_title,main_picture_url,keyword,good_code,ifnull(seller_id,0),ifnull(shop_id,0),' +
 	'ifnull(brand_id,0),ifnull(category_id,0),goods_type,ifnull(is_cash_delivery,0),ifnull(delivery_type,0),'+
 	'transport_mode from tospinomall_product.pms_goods_info limit '+startpoint+','+numperpage
 
-	mut res := conn.query(sqlstr)?
+	mut res := conn.query(sqlstr)!
 	// println(res)
 	mut mapstrlist := []map[string]string{} //创建空数组
 	for row in res.rows() {
@@ -119,7 +119,7 @@ struct Module {
 	examine_status int
 }
 
-fn mysql_orm(startpoint string, numperpage string) ?[]map[string]string {
+pub fn mysql_orm(startpoint string, numperpage string) ![]map[string]string {
 	mut conn := mysql.Connection{
 		// host: '10.243.0.2'
 		// port: 3306
