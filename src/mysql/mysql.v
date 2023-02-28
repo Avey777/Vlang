@@ -51,7 +51,7 @@ pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 		direct["transport_mode"] = row.vals[14]
 		// println(direct)
 		mapstrlist << direct  //追加direct到mapstrlist 数组
-	}	
+	}
 	conn.close()
 	return mapstrlist
 }

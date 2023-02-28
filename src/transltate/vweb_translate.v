@@ -22,17 +22,17 @@ fn main() {
 
 ['/index';get;post]
 pub fn (mut app App) index() !vweb.Result {
-	
+
 
 	mut response := request(get_tk,q)!
 	if app.status == '200 OK'{
-	
+
 	mut responsejson := json.encode(response)
 		return app.json(responsejson)
 	}else{
 		return app.text("GoogleTranslate 非正常响应")
 	}
-	
+
 }
 
 fn request(get_tk string, q string) !string {
