@@ -1,16 +1,16 @@
-import mysql
+import db.mysql
 import net.http
 import json
 
 
 fn main() {
 
-	sqldata := sqlquery('1','100000')!
+	sqldata := sqlquery('1','1000000')?
 	// sqldata := mysql_orm('1','10000')? //orm
 	// println(sqldata)
 	mut jsonstr := json.encode(sqldata) //将[]map[string]string 数据类型 编码为 json 数据类型
-	reponse := request(jsonstr)!
-	// println(reponse)
+	reponse := request(jsonstr)?
+	println(reponse)
 
 	// data := '{"id": "6204", "tsin": "SPU000280COEY"}'
 	// reponse := request(data)?
@@ -99,67 +99,67 @@ pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 }
 
 
-// ORM ---
-[table: 'pms_goods_info']
-struct Module {
-	id           int    [primary; sql: serial]
-	tsin         string
-	good_title	string
-	main_picture_url	string
-	keyword	string
-	good_code	string
-	seller_id 	int
-	shop_id		int
-	brand_id	int
-	category_id	int
-	goods_type	int
-	is_cash_delivery int
-	delivery_type int
-	transport_mode int
-	examine_status int
-}
+// // ORM ---
+// [table: 'pms_goods_info']
+// struct Module {
+// 	id           int    [primary; sql: serial]
+// 	tsin         string
+// 	good_title	string
+// 	main_picture_url	string
+// 	keyword	string
+// 	good_code	string
+// 	seller_id 	int
+// 	shop_id		int
+// 	brand_id	int
+// 	category_id	int
+// 	goods_type	int
+// 	is_cash_delivery int
+// 	delivery_type int
+// 	transport_mode int
+// 	examine_status int
+// }
 
-fn mysql_orm(startpoint string, numperpage string) ?[]map[string]string {
-	mut conn := mysql.Connection{
-		// host: '10.243.0.2'
-		// port: 3306
-		// username: 'admin'
-		// password: 'admin'
+// fn mysql_orm(startpoint string, numperpage string) ?[]map[string]string {
+// 	mut conn := mysql.Connection{
+// 		// host: '10.243.0.2'
+// 		// port: 3306
+// 		// username: 'admin'
+// 		// password: 'admin'
 
-		host: '42.193.159.7'
-		port: 3306
-		username: 'select'
-		password: 'Dgxdl021'
-		dbname: 'tospinomall_product'
-	}
-	conn.connect() or { panic(err) }
+// 		host: '42.193.159.7'
+// 		port: 3306
+// 		username: 'select'
+// 		password: 'Dgxdl021'
+// 		dbname: 'tospinomall_product'
+// 	}
+// 	conn.connect() or { panic(err) }
 
-	res := sql conn {
-		select from Module where examine_status==2  limit startpoint+','+numperpage
-	}
-	// eprintln('$row.id')
-	mut mapstrlist := []map[string]string{} //创建空数组
-	for row in res {
-		mut direct := map[string]string{} // a map with `string` keys and `string` values
-		direct["id"] = '$row.id'
-		direct["objectID"] = '$row.id'
-		direct["tsin"] = '$row.tsin'
-		direct["good_title"] = '$row.good_title'
-		direct["poster"] = '$row.main_picture_url'+ "?.webp"  //不增加后缀，meilisearch不显示图片
-		direct["keyword"] = '$row.keyword'
-		direct["good_code"] = '$row.good_code'
-		direct["seller_id"] = '$row.seller_id'
-		direct["shop_id"] = '$row.shop_id'
-		direct["brand_id"] = '$row.brand_id'
-		direct["category_id"] = '$row.category_id'
-		direct["goods_type"] = '$row.goods_type'
-		direct["is_cash_delivery"] = '$row.is_cash_delivery'
-		direct["delivery_type"] = '$row.delivery_type'
-		direct["transport_mode"] = '$row.transport_mode'
-		// println(direct)
-		mapstrlist << direct  //追加direct到mapstrlist 数组
-	}
-	// println(mapstrlist)
-	conn.close()
-	return mapstrlist
-}
+// 	res := sql conn {
+// 		select from Module where examine_status==2  limit startpoint+','+numperpage
+// 	}
+// 	// eprintln('$row.id')
+// 	mut mapstrlist := []map[string]string{} //创建空数组
+// 	for row in res {
+// 		mut direct := map[string]string{} // a map with `string` keys and `string` values
+// 		direct["id"] = '$row.id'
+// 		direct["objectID"] = '$row.id'
+// 		direct["tsin"] = '$row.tsin'
+// 		direct["good_title"] = '$row.good_title'
+// 		direct["poster"] = '$row.main_picture_url'+ "?.webp"  //不增加后缀，meilisearch不显示图片
+// 		direct["keyword"] = '$row.keyword'
+// 		direct["good_code"] = '$row.good_code'
+// 		direct["seller_id"] = '$row.seller_id'
+// 		direct["shop_id"] = '$row.shop_id'
+// 		direct["brand_id"] = '$row.brand_id'
+// 		direct["category_id"] = '$row.category_id'
+// 		direct["goods_type"] = '$row.goods_type'
+// 		direct["is_cash_delivery"] = '$row.is_cash_delivery'
+// 		direct["delivery_type"] = '$row.delivery_type'
+// 		direct["transport_mode"] = '$row.transport_mode'
+// 		// println(direct)
+// 		mapstrlist << direct  //追加direct到mapstrlist 数组
+// 	}
+// 	// println(mapstrlist)
+// 	conn.close()
+// 	return mapstrlist
+// }
