@@ -1,19 +1,11 @@
-// blog.v
-module main
-import vweb
+module translate
+
 import net.http
 import json
 
-const (
-	http_port   = 8081
-	get_tk		= '193286.281871'
-	q 			= '我是最好的中国人'
-)
 
-struct App {
-	vweb.Context
-}
 
+<<<<<<< HEAD:src/transltate/vweb_translate.v
 fn main() {
 	// app := App{}
 	// vweb.run(app, http_port)
@@ -36,8 +28,12 @@ pub fn (mut app App) index() !vweb.Result {
 }
 
 fn request(get_tk string, q string) !string {
+=======
+pub fn req_gtranslate(get_tk string, q string) !string {
+>>>>>>> b87c12e0421b91c6be479530cef3c904c2d01a56:src/translate/gtranslate.v
 	// get_tk := '859249.762488'
 	// q := '我'
+
 	// get_tk := '193286.281871'
 	// q := '我是最好的中国人'
 
@@ -45,14 +41,17 @@ fn request(get_tk string, q string) !string {
 		method: http.Method.get
 		url: 'https://translate.google.com/translate_a/single?client=webapp&sl=zh-CN&tl=en&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&otf=2&ssel=0&tsel=0&kc=3&tk=' + get_tk + '&q=' + q
 
+		// url: "https://ms-43c9c269b6b3-327.lon.meilisearch.io/indexes/tospinomall/documents"
+		// data: "{'id': '6204', 'tsin': 'SPU000280COEY'}" // 此样式不可用
+		// data: '{"id": "6204", "tsin": "SPU000280COEY"}'
+		// data: data
 	}
-	req.add_custom_header('Content-Type', 'application/json')!
+	// req.add_custom_header('Content-Type', 'application/json')!
 	req.add_custom_header('user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36')!
 	req.add_custom_header('referer', 'https://translate.google.cn/')!
 	reponse := req.do()!
-	println("打印req:$reponse")
-	return reponse.body
-
+	// println("打印req:$reponse")
+	return json.encode(reponse.body)
 }
 
 

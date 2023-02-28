@@ -1,4 +1,6 @@
+module main
 import db.mysql
+
 // import net.http
 // import json
 
@@ -10,7 +12,7 @@ fn main() {
 	orm := mysql_orm('1','2')
 	println(orm)
 }
-pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
+pfn sqlquery(startpoint string, numperpage string) ![]map[string]string {
 	mut conn := mysql.Connection{
 		host: '192.168.3.2'
 		port: 3306
@@ -18,14 +20,14 @@ pub fn sqlquery(startpoint string, numperpage string) ?[]map[string]string {
 		password: 'admin'
 		dbname: 'tospinomall_product'
 	}
-	conn.connect()?
+	conn.connect()!
 	// res := conn.query('show tables')?
 	// mut sqlstr := 'select id,tsin from tospinomall_product.pms_goods_info limit 5'
 	mut sqlstr := 'select id,id,tsin, good_title,main_picture_url,keyword,good_code,ifnull(seller_id,0),ifnull(shop_id,0),' +
 	'ifnull(brand_id,0),ifnull(category_id,0),goods_type,ifnull(is_cash_delivery,0),ifnull(delivery_type,0),'+
 	'transport_mode from tospinomall_product.pms_goods_info limit '+startpoint+','+numperpage
 
-	mut res := conn.query(sqlstr)?
+	mut res := conn.query(sqlstr)!
 	mut mapstrlist := []map[string]string{} //创建空数组
 	for row in res.rows() {
 		//map的另一种写法
@@ -76,7 +78,7 @@ struct Pgi {
 }
 
 
-fn mysql_orm(startpoint string, numperpage string) []map[string]string {
+fn mysql_orm(startpoint string, numperpage string) ![]map[string]string {
 	mut conn := mysql.Connection{
 		host: '10.243.0.2'
 		port: 3306
